@@ -3,13 +3,13 @@
 # Vue 与模板
 
 使用步骤
-+ 编写 页面 模板
-    1 直接在 HTML 标签中写 标签
-    2 使用template
-    3 使用单文件 （<template />）
-+ 创建 Vue 的实例
-    1 在 Vue 的构造函数中提供：data, method,computed,watch,props,...
-+ 将 Vue 挂载到页面中 （ mount ）
+1. 编写 页面 模板
+    - 直接在 HTML 标签中写 标签
+    - 使用template
+    - 使用单文件 （<template />）
+2. 创建 Vue 的实例
+    - 在 Vue 的构造函数中提供：data, method,computed,watch,props,...
+3. 将 Vue 挂载到页面中 （ mount ）
 
 # 数据驱动模型
 
