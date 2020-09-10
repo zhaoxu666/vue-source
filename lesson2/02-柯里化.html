@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let tags =  'div,p,a,img,ul,li'.split(',')
+        function makeMap(keys) {
+            let set = {}; //  集合
+            keys.forEach (f => {
+                set[f] = true
+            })
+            return function (tagName) {
+                return !!set[tagName.toLowerCase()]  // 自定义组件 set[tagName] 是个 undefined 用!!undefined  == false
+            }
+        }
+
+        let isHTMLTag = makeMap(tags) // 返回的函数
+
+        //  10个标签需要判断，那么还有没有循环存在？？？
+    </script>
+</body>
+</html>
