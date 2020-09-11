@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var o = {
+            name: 'James',
+            age: 30,
+            gender: '难'
+        }
+
+        // 简化后的版本
+        function defineReactive(target, key, value, enumerable) {
+            // 函数内部就是一个局部作用域，这个value 就只在函数内使用的变量（闭包）
+            Object.defineProperty(target, key, {
+                configurable:true,
+                enumerable: !!enumerable,
+
+                get () {
+                    console.log(`读取o的${key}属性`)
+                    return value
+                },
+                set (newValue) {
+                    console.log(`设置o 的 ${key} 属性为：${newValue}`)
+                    value = newValue
+                }
+            })
+        }
+
+        // 将对象转换为 响应式的
+        let keys = Object.keys(o)
+        for(let i = 0; i < keys.length; i++){
+            defineReactive(o, keys[i], o[keys[i]], true)
+        }
+
+
+    </script>
+</body>
+</html>
