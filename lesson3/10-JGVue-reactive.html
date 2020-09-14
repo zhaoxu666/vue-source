@@ -121,12 +121,14 @@
         }
 
         function JGVue(options){
-            this._data = options.data
+            this._data =  options.data
             let elm = document.querySelector(options.el)  // vue中是字符串， 这里是DOM
             this._template = elm
             this._parent = elm.parentNode
 
             // 进行响应式处理
+
+            reactiy(this._data, this /* 将Vue 实例传入 */)
             this.mount() // 挂载
         }
 
@@ -179,14 +181,106 @@
             // 每次会将页面中的 DOM 全部替换
         }
 
+
+
+        // 响应式化的部分
+        let ARRAY_METHOD =  [
+            'push',
+            'pop',
+            'shift',
+            'unshift',
+            'reverse',
+            'sort',
+            'splice'
+        ]
+
+        // 思路， 原型式继承： 修改原型链的结构
+        // 继承关系： arr -> Array.prototype -> Object.prototype -> ...
+        // 继承关系： arr -> 改写的方法  -> Array.prototype -> Object.prototype -> ...
+
+
+        let array_method = Object.create( Array.prototype )
+
+        ARRAY_METHOD.forEach(method => {
+            array_method[method] = function () {
+                // 调用原来的方法
+                console.log('调用的是拦截的' + method + '方法')
+
+                // 将数据进行响应式化
+                for(let i = 0 ; i< arguments.length; i++){
+                    reactiy(arguments[i])
+                }
+
+                let res = Array.prototype[method].apply(this, arguments)
+                
+                // Array.prototype[method].call(this, ...arguments)  // 类比
+                return res
+            }
+        })
+
+        // 除了递归 还可以说会用队列（ 深度优先转换为广度优先 ）
+
+        // 将对象o 响应式化
+        function reactiy (o, vm) {
+            let keys = Object.keys(o)
+            for(let i = 0; i< keys.length;i++){
+                let key = keys[i] // 属性名
+                let value = o[key]
+                if ( Array.isArray(value) ) {
+                    // 数组
+                    value.__proto__ =  array_method // 数组就响应式了
+                    for (let j = 0; j < value.length; j++) {
+                        reactiy(value[j], vm) // 递归
+                    }
+                }
+                else {
+                    // 对象或值类型
+                    defineReactive.call(vm, o, key, value, true)
+                }
+            }
+        }
+
+        // 简化后的版本
+        function defineReactive(target, key, value, enumerable) {
+            // 函数内部就是一个局部作用域，这个value 就只在函数内使用的变量（闭包）
+            let that = this
+            // 这种处理后 this 就是 Vue 实例
+            if(typeof value === 'object' && value !== null && !Array.isArray(value)){
+                // 是非数组的引用类型
+                reactiy(value)
+            }
+            Object.defineProperty(target, key, {
+                configurable:true,
+                enumerable: !!enumerable,
+
+                get () {
+                    return value
+                },
+                set (newValue) {
+                    // 模板刷新 （这现在是假的，只是演示）
+                    // Vue 实例怎么获取
+                    value = newValue
+                    that.mountComponent()
+                }
+            })
+        }
+
         let app = new JGVue({
             el: '#root',
             data: {
                 name:'zhaoxu',
                 age: 18,
-                gender: 'zz'
+                gender: 'zz',
+                datas : [
+                    { info:  '好难' },
+                    { info:  '很难' },
+                    { info:  '太难' }, 
+                    { info:  '非常难' }
+                ]
             }
         })
+
+        // 修改数据的时候 ，模板要刷新？？？
 
     </script>
 </body>

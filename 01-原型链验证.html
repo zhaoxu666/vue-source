@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function Person (name) {
+            this.name = name
+        }
+
+        let zs = new Person('张三')
+
+        var newObj = {name: '赵旭'}
+
+        console.log('实例对象zs的__proto__', zs.__proto__)
+
+        console.log('构造函数Person.prototype',Person.prototype)
+
+        console.log('实例对象zs的__proto__ 等于 构造函数Person.prototype', zs.__proto__ === Person.prototype)
+
+        console.log('原型对象的__proto__是 Object.prototype？', zs.__proto__.__proto__)
+
+        console.log('Object.prototype', Object.prototype) // Object 是内置构造函数
+
+        console.log('原型对象的__proto__和 Object.prototype相等：', zs.__proto__.__proto__ === Object.prototype)
+
+        console.log('Object.prototype的__proto__：', Object.prototype.__proto__) // null
+
+        console.log('原型对象的__proto__.__proto__：', Person.prototype.__proto__.__proto__) // null
+
+        console.log('内置Object实例对象__proto__:', newObj.__proto__)
+
+        console.log('内置Object实例对象__proto__是内置构造函数Object的prototype么:', newObj.__proto__ === Object.prototype)
+        
+        console.log('内置数组构造函数的prototype是Object.prototype吗？', Array.prototype === Object.prototype)
+
+        console.log('内置数组构造函数的prototype.__proto__是Object.prototype吗？', Array.prototype.__proto__ === Object.prototype)
+
+
+        /*
+        *  构造函数对象才有prototype属性
+        *
+        *  所有对象 都有 __proto__属性
+        *
+        *  自定义构造函数 上会有个原型对象
+        *
+        *  Object内置构造函数上的原型对象 是 自定义构造函数的原型对象的__proto__
+        */
+
+
+
+
+
+    </script>
+</body>
+</html>
